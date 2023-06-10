@@ -294,7 +294,7 @@ def admin_approve_patient_view(request):
 @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def approve_patient_view(request,pk):
-    patient=models.Patient.objects.get(id=pk)
+    patient = models.Patient.objects.get(id=pk)
     patient.status=True
     patient.save()
     return redirect(reverse('admin-approve-patient'))
