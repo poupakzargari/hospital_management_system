@@ -11,9 +11,6 @@ from django.db.models import Q
 
 
 
-def aboutus_view(request):
-    return render(request,'hospital/aboutus.html')
-
 def admin_signup_view(request):
     form=forms.AdminSigupForm()
     if request.method=='POST':
@@ -705,3 +702,22 @@ def patient_discharge_view(request):
 
 # ------------------------ PATIENT RELATED VIEWS END ------------------------------
 # ---------------------------------------------------------------------------------
+
+
+#---------------------------------------------------------------------------------
+#------------------------ ABOUT US AND CONTACT US VIEWS START ------------------------------
+#---------------------------------------------------------------------------------
+def aboutus_view(request):
+    return render(request,'hospital/aboutus.html')
+
+def contactus_view(request):
+    sub = forms.ContactusForm()
+    if request.method == 'POST':
+        sub = forms.ContactusForm(request.POST)
+        if sub.is_valid():
+            email = sub.cleaned_data['Email']
+            name=sub.cleaned_data['Name']
+            message = sub.cleaned_data['Message']
+            send_mail(str(name)+' || '+str(email),message,settings.EMAIL_HOST_USER, settings.EMAIL_RECEIVING_USER, fail_silently = False)
+            return render(request, 'hospital/contactussuccess.html')
+    return render(request, 'hospital/contactus.html', {'form':sub})
